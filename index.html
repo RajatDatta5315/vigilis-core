@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIGILIS | Global AI Defense Grid</title>
+    <link rel="icon" type="image/png" href="VIGILIS.png">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -45,14 +46,16 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            text-decoration: none;
         }
 
+        /* LOGO STYLING */
         .logo-img {
-            width: 30px;
-            height: 30px;
-            border-radius: 5px;
-            background: var(--neon-green); /* Placeholder until you add image */
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px var(--neon-green));
         }
 
         .logo-text {
@@ -163,10 +166,10 @@
 <body>
 
     <nav>
-        <div class="logo-container">
-            <img src="https://via.placeholder.com/30/00ff41/000000?text=V" class="logo-img" id="brand-logo">
+        <a href="#" class="logo-container">
+            <img src="VIGILIS.png" class="logo-img" id="brand-logo">
             <div class="logo-text">VIGILIS</div>
-        </div>
+        </a>
         <a href="add.html" class="cta-button">Initialize Agent +</a>
     </nav>
 
@@ -185,6 +188,7 @@
     <script>
         async function fetchStatus() {
             try {
+                // Fetch public status file
                 const response = await fetch('status_public.json?t=' + new Date().getTime());
                 if (!response.ok) throw new Error("Uplink Failed");
                 const data = await response.json();
@@ -219,6 +223,8 @@
                 document.getElementById('dashboard').innerHTML = "<div style='color:var(--neon-orange)'>AWAITING DATA STREAM...</div>";
             }
         }
+        
+        // Run immediately
         fetchStatus();
     </script>
 </body>
