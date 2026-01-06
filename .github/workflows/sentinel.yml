@@ -1,8 +1,8 @@
 name: Vigilis Swarm
 on:
   schedule:
-    - cron: '0 */6 * * *' # Run every 6 hours
-  workflow_dispatch: # Allows you to click "Run Now" button
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,16 +17,18 @@ jobs:
         with:
           python-version: '3.9'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install aiohttp huggingface_hub requests
       - name: Run The Swarm
         env:
-          # Add your token in GitHub Repo Settings -> Secrets
-          HF_TOKEN: ${{ secrets.HF_TOKEN }} 
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          JSONBIN_ID: ${{ secrets.JSONBIN_ID }}
+          JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
         run: python vigilis_core.py
-      - name: Commit Database Update
+      - name: Publish Public Status
         run: |
           git config --global user.name 'Vigilis Sentinel'
           git config --global user.email 'bot@vigilis.ai'
-          git add database.json
-          git commit -m "Auto-update client status"
+          git add status_public.json
+          git commit -m "Update public status" || exit 0
           git push
+
