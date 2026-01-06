@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Test Bot",
     "status": "ERROR",
-    "detail": "Model mistralai/Mistral-7B-Instruct-v0.2 is not supported for task text-generation and provider featherless-ai. Supported task: conversational.",
+    "detail": "Connection Error",
     "last_check": ""
   }
 ]
