@@ -1,27 +1,121 @@
-<script>
-    // Fetch directly from the generated file in the repo
-    async function fetchStatus() {
-        // Since we are on GitHub Pages, the file is at the root
-        const response = await fetch('status_public.json'); 
-        const data = await response.json();
-        
-        const container = document.getElementById('dashboard');
-        container.innerHTML = '';
-        
-        data.forEach(client => {
-            const div = document.createElement('div');
-            div.className = `card ${client.status}`;
-            div.innerHTML = `
-                <span class="status-badge">${client.status}</span>
-                <h3>${client.name}</h3>
-                <p>${client.detail}</p>
-                <small style="color:#555">Last Checked: ${new Date(client.last_check).toLocaleTimeString()}</small>
-            `;
-            container.appendChild(div);
-        });
-    }
-    
-    fetchStatus();
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIGILIS | Global AI Defense Grid</title>
+    <style>
+        /* --- CYBERPUNK THEME --- */
+        body { 
+            background-color: #050505; 
+            color: #00ff41; 
+            font-family: 'Courier New', monospace; 
+            padding: 20px; 
+            margin: 0; 
+        }
 
+        h1 { 
+            border-bottom: 2px solid #333; 
+            padding-bottom: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+        }
+
+        p.subtitle {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .card { 
+            border: 1px solid #333; 
+            padding: 20px; 
+            border-radius: 8px; 
+            background: #0f0f0f; 
+            transition: 0.3s; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover { 
+            border-color: #555; 
+            transform: translateY(-2px); 
+        }
+
+        h3 { margin-top: 0; color: #fff; }
+        
+        .detail { color: #ccc; font-size: 0.9em; margin: 10px 0; }
+        small { color: #555; display: block; margin-top: 15px; }
+
+        /* STATUS COLORS */
+        .SECURE { border-top: 4px solid #00ff41; }
+        .SECURE .status-badge { color: #00ff41; float: right; font-weight: bold;}
+
+        .COMPROMISED { border-top: 4px solid #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.1); }
+        .COMPROMISED .status-badge { color: #ff0000; float: right; font-weight: bold; animation: blink 1s infinite; }
+
+        .OFFLINE { border-top: 4px solid #ffa500; }
+        .OFFLINE .status-badge { color: #ffa500; float: right; font-weight: bold;}
+
+        @keyframes blink { 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+    <h1>VIGILIS SYSTEM STATUS</h1>
+    <p class="subtitle">Live Monitoring of AI Agents for Hallucination & Compromise</p>
+    
+    <div id="dashboard" class="grid">
+        Loading Neural Link...
+    </div>
+
+    <script>
+        // --- LOGIC TO FETCH DATA ---
+        async function fetchStatus() {
+            try {
+                // We add ?t=... to force browser to load fresh data, avoiding cache
+                const response = await fetch('status_public.json?t=' + new Date().getTime());
+                
+                if (!response.ok) {
+                    throw new Error("Uplink failed. File not found.");
+                }
+
+                const data = await response.json();
+                const container = document.getElementById('dashboard');
+                container.innerHTML = '';
+                
+                if (data.length === 0) {
+                     container.innerHTML = "<div>No active agents in the grid.</div>";
+                     return;
+                }
+
+                data.forEach(client => {
+                    const div = document.createElement('div');
+                    // Add class based on status (SECURE, COMPROMISED, OFFLINE)
+                    div.className = `card ${client.status}`;
+                    
+                    div.innerHTML = `
+                        <span class="status-badge">${client.status}</span>
+                        <h3>${client.name}</h3>
+                        <p class="detail">${client.detail}</p>
+                        <small>LAST CHECK: ${new Date(client.last_check).toLocaleTimeString()}</small>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                console.error(error);
+                document.getElementById('dashboard').innerHTML = "SYSTEM OFFLINE: " + error.message;
+            }
+        }
+        
+        // Run immediately
+        fetchStatus();
+    </script>
+</body>
+</html>
 
