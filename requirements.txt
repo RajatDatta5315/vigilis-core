@@ -1,0 +1,3 @@
+aiohttp
+huggingface_hub
+nest_asyncio
