@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIGILIS | Global AI Defense Grid</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #030303;
-            --card-bg: rgba(20, 20, 20, 0.6);
-            --border: #333;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
             --neon-green: #00ff41;
             --neon-red: #ff3333;
             --neon-orange: #ffaa00;
@@ -17,168 +17,183 @@
 
         body { 
             background-color: var(--bg); 
-            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             color: #fff; 
-            font-family: 'JetBrains Mono', monospace; 
+            font-family: 'Space Grotesk', sans-serif; 
             margin: 0; 
             padding: 0; 
             min-height: 100vh;
         }
 
-        /* --- HEADER & NAV --- */
+        /* --- PREMIUM HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
             border-bottom: 1px solid var(--border);
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--neon-green);
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
+        .logo-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            background: var(--neon-green); /* Placeholder until you add image */
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        /* --- THE GLOWING BUTTON --- */
         .cta-button {
-            background: var(--neon-green);
-            color: #000;
-            padding: 10px 20px;
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--neon-green);
+            padding: 12px 24px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
+            border: 1px solid var(--neon-green);
             border-radius: 4px;
-            font-size: 0.9rem;
-            transition: 0.3s;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
         .cta-button:hover {
-            box-shadow: 0 0 15px var(--neon-green);
-            transform: scale(1.05);
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
         }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO --- */
         .hero {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
         .hero h2 {
-            font-size: 1.8rem;
-            color: #888;
-            font-weight: 400;
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 300;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
-        .hero span { color: #fff; }
+        .status-badge-main {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
 
-        /* --- GRID SYSTEM --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 20px; 
-        }
+        /* --- GRID --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
         .card { 
             border: 1px solid var(--border); 
-            padding: 25px; 
+            padding: 30px; 
             border-radius: 12px; 
-            background: var(--card-bg); 
-            backdrop-filter: blur(5px);
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
             transition: 0.3s; 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
         .card:hover { 
             border-color: #555; 
             transform: translateY(-5px); 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
-        .card-header {
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card h3 { margin: 0; font-size: 1.1rem; font-weight: 500;}
+        
+        .status-indicator {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card h3 { margin: 0; font-size: 1.2rem; }
-        
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-            box-shadow: 0 0 10px currentColor;
-        }
-
-        .detail { color: #aaa; font-size: 0.9em; line-height: 1.4; }
-        .timestamp { color: #555; display: block; margin-top: 20px; font-size: 0.7em; text-transform: uppercase;}
-
-        /* STATUS STYLES */
-        .SECURE { border-top: 3px solid var(--neon-green); }
-        .SECURE .status-text { color: var(--neon-green); }
-
-        .COMPROMISED { border-top: 3px solid var(--neon-red); }
-        .COMPROMISED .status-text { color: var(--neon-red); animation: pulse 1s infinite; }
-
-        .ERROR, .OFFLINE { border-top: 3px solid var(--neon-orange); }
-        .ERROR .status-text { color: var(--neon-orange); }
-
-        @keyframes pulse { 50% { opacity: 0.5; } }
-        
-        /* FOOTER */
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #444;
+            gap: 8px;
             font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.5);
         }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        .detail { color: #888; font-size: 0.9em; line-height: 1.5; margin-bottom: 20px;}
+        .timestamp { color: #444; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* COLORS */
+        .SECURE .dot { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .SECURE .status-indicator { color: var(--neon-green); border: 1px solid rgba(0,255,65,0.2); }
+        
+        .COMPROMISED .dot { background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); }
+        .COMPROMISED .status-indicator { color: var(--neon-red); border: 1px solid rgba(255,51,51,0.2); }
+
+        .ERROR, .OFFLINE .dot { background: var(--neon-orange); }
+        .ERROR .status-indicator, .OFFLINE .status-indicator { color: var(--neon-orange); border: 1px solid rgba(255,170,0,0.2); }
+
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">VIGILIS_GRID</div>
-        <a href="https://forms.google.com" target="_blank" class="cta-button">ADD YOUR AGENT</a>
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/30/00ff41/000000?text=V" class="logo-img" id="brand-logo">
+            <div class="logo-text">VIGILIS</div>
+        </div>
+        <a href="add.html" class="cta-button">Initialize Agent +</a>
     </nav>
 
     <div class="hero">
-        <h2>Global AI Hallucination Monitor</h2>
-        <p style="color: #666;">Status: <span style="color: var(--neon-green);">OPERATIONAL</span> // Monitoring Active Nodes</p>
+        <div style="margin-bottom: 20px;"><span class="status-badge-main">SYSTEM ONLINE</span></div>
+        <h2>Global AI Defense Grid</h2>
+        <p style="color: #666; font-size: 0.9rem;">Automated Hallucination & Compromise Detection</p>
     </div>
 
     <div class="container">
         <div id="dashboard" class="grid">
-            <div style="color: #666;">Connecting to Satellite Feed...</div>
+            <div style="color: #666;">Establishing Neural Handshake...</div>
         </div>
     </div>
-
-    <footer>
-        VIGILIS SYSTEMS © 2026. SECURING THE KRYV NETWORK.
-    </footer>
 
     <script>
         async function fetchStatus() {
             try {
                 const response = await fetch('status_public.json?t=' + new Date().getTime());
-                if (!response.ok) throw new Error("Network Uplink Failed");
+                if (!response.ok) throw new Error("Uplink Failed");
                 const data = await response.json();
                 
                 const container = document.getElementById('dashboard');
                 container.innerHTML = '';
                 
                 if (data.length === 0) {
-                     container.innerHTML = "<div style='color:white'>No active agents.</div>";
+                     container.innerHTML = "<div style='color:#666'>No agents in grid.</div>";
                      return;
                 }
 
@@ -186,31 +201,24 @@
                     const div = document.createElement('div');
                     div.className = `card ${client.status}`;
                     
-                    // Determine Color
-                    let color = '#fff';
-                    if(client.status === 'SECURE') color = '#00ff41';
-                    if(client.status === 'COMPROMISED') color = '#ff3333';
-                    if(client.status === 'ERROR' || client.status === 'OFFLINE') color = '#ffaa00';
-
                     div.innerHTML = `
                         <div class="card-header">
                             <h3>${client.name}</h3>
-                            <div class="status-text" style="color:${color}">
-                                <span class="status-dot" style="background-color:${color}"></span>
+                            <div class="status-indicator">
+                                <span class="dot"></span>
                                 ${client.status}
                             </div>
                         </div>
                         <p class="detail">Log: ${client.detail}</p>
-                        <small class="timestamp">SCAN TIME: ${new Date(client.last_check).toLocaleTimeString()}</small>
+                        <small class="timestamp">SCAN ID: ${new Date(client.last_check).getTime().toString().slice(-6)} // ${new Date(client.last_check).toLocaleTimeString()}</small>
                     `;
                     container.appendChild(div);
                 });
             } catch (error) {
                 console.error(error);
-                document.getElementById('dashboard').innerHTML = "<div style='color:red'>SYSTEM OFFLINE. RETRYING...</div>";
+                document.getElementById('dashboard').innerHTML = "<div style='color:var(--neon-orange)'>AWAITING DATA STREAM...</div>";
             }
         }
-        
         fetchStatus();
     </script>
 </body>
