@@ -4,27 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIGILIS | Global AI Defense Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CYBERPUNK THEME --- */
+        :root {
+            --bg: #030303;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --border: #333;
+            --neon-green: #00ff41;
+            --neon-red: #ff3333;
+            --neon-orange: #ffaa00;
+        }
+
         body { 
-            background-color: #050505; 
-            color: #00ff41; 
-            font-family: 'Courier New', monospace; 
-            padding: 20px; 
+            background-color: var(--bg); 
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+            color: #fff; 
+            font-family: 'JetBrains Mono', monospace; 
             margin: 0; 
+            padding: 0; 
+            min-height: 100vh;
         }
 
-        h1 { 
-            border-bottom: 2px solid #333; 
-            padding-bottom: 10px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
+        /* --- HEADER & NAV --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
             font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--neon-green);
         }
 
-        p.subtitle {
+        .cta-button {
+            background: var(--neon-green);
+            color: #000;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 15px var(--neon-green);
+            transform: scale(1.05);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .hero h2 {
+            font-size: 1.8rem;
             color: #888;
-            margin-bottom: 30px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .hero span { color: #fff; }
+
+        /* --- GRID SYSTEM --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .grid { 
@@ -34,86 +90,127 @@
         }
 
         .card { 
-            border: 1px solid #333; 
-            padding: 20px; 
-            border-radius: 8px; 
-            background: #0f0f0f; 
+            border: 1px solid var(--border); 
+            padding: 25px; 
+            border-radius: 12px; 
+            background: var(--card-bg); 
+            backdrop-filter: blur(5px);
             transition: 0.3s; 
-            position: relative;
-            overflow: hidden;
         }
 
         .card:hover { 
             border-color: #555; 
-            transform: translateY(-2px); 
+            transform: translateY(-5px); 
         }
 
-        h3 { margin-top: 0; color: #fff; }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card h3 { margin: 0; font-size: 1.2rem; }
         
-        .detail { color: #ccc; font-size: 0.9em; margin: 10px 0; }
-        small { color: #555; display: block; margin-top: 15px; }
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            box-shadow: 0 0 10px currentColor;
+        }
 
-        /* STATUS COLORS */
-        .SECURE { border-top: 4px solid #00ff41; }
-        .SECURE .status-badge { color: #00ff41; float: right; font-weight: bold;}
+        .detail { color: #aaa; font-size: 0.9em; line-height: 1.4; }
+        .timestamp { color: #555; display: block; margin-top: 20px; font-size: 0.7em; text-transform: uppercase;}
 
-        .COMPROMISED { border-top: 4px solid #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.1); }
-        .COMPROMISED .status-badge { color: #ff0000; float: right; font-weight: bold; animation: blink 1s infinite; }
+        /* STATUS STYLES */
+        .SECURE { border-top: 3px solid var(--neon-green); }
+        .SECURE .status-text { color: var(--neon-green); }
 
-        .OFFLINE { border-top: 4px solid #ffa500; }
-        .OFFLINE .status-badge { color: #ffa500; float: right; font-weight: bold;}
+        .COMPROMISED { border-top: 3px solid var(--neon-red); }
+        .COMPROMISED .status-text { color: var(--neon-red); animation: pulse 1s infinite; }
 
-        @keyframes blink { 50% { opacity: 0.5; } }
+        .ERROR, .OFFLINE { border-top: 3px solid var(--neon-orange); }
+        .ERROR .status-text { color: var(--neon-orange); }
+
+        @keyframes pulse { 50% { opacity: 0.5; } }
+        
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
-    <h1>VIGILIS SYSTEM STATUS</h1>
-    <p class="subtitle">Live Monitoring of AI Agents for Hallucination & Compromise</p>
-    
-    <div id="dashboard" class="grid">
-        Loading Neural Link...
+
+    <nav>
+        <div class="logo">VIGILIS_GRID</div>
+        <a href="https://forms.google.com" target="_blank" class="cta-button">ADD YOUR AGENT</a>
+    </nav>
+
+    <div class="hero">
+        <h2>Global AI Hallucination Monitor</h2>
+        <p style="color: #666;">Status: <span style="color: var(--neon-green);">OPERATIONAL</span> // Monitoring Active Nodes</p>
     </div>
 
+    <div class="container">
+        <div id="dashboard" class="grid">
+            <div style="color: #666;">Connecting to Satellite Feed...</div>
+        </div>
+    </div>
+
+    <footer>
+        VIGILIS SYSTEMS © 2026. SECURING THE KRYV NETWORK.
+    </footer>
+
     <script>
-        // --- LOGIC TO FETCH DATA ---
         async function fetchStatus() {
             try {
-                // We add ?t=... to force browser to load fresh data, avoiding cache
                 const response = await fetch('status_public.json?t=' + new Date().getTime());
-                
-                if (!response.ok) {
-                    throw new Error("Uplink failed. File not found.");
-                }
-
+                if (!response.ok) throw new Error("Network Uplink Failed");
                 const data = await response.json();
+                
                 const container = document.getElementById('dashboard');
                 container.innerHTML = '';
                 
                 if (data.length === 0) {
-                     container.innerHTML = "<div>No active agents in the grid.</div>";
+                     container.innerHTML = "<div style='color:white'>No active agents.</div>";
                      return;
                 }
 
                 data.forEach(client => {
                     const div = document.createElement('div');
-                    // Add class based on status (SECURE, COMPROMISED, OFFLINE)
                     div.className = `card ${client.status}`;
                     
+                    // Determine Color
+                    let color = '#fff';
+                    if(client.status === 'SECURE') color = '#00ff41';
+                    if(client.status === 'COMPROMISED') color = '#ff3333';
+                    if(client.status === 'ERROR' || client.status === 'OFFLINE') color = '#ffaa00';
+
                     div.innerHTML = `
-                        <span class="status-badge">${client.status}</span>
-                        <h3>${client.name}</h3>
-                        <p class="detail">${client.detail}</p>
-                        <small>LAST CHECK: ${new Date(client.last_check).toLocaleTimeString()}</small>
+                        <div class="card-header">
+                            <h3>${client.name}</h3>
+                            <div class="status-text" style="color:${color}">
+                                <span class="status-dot" style="background-color:${color}"></span>
+                                ${client.status}
+                            </div>
+                        </div>
+                        <p class="detail">Log: ${client.detail}</p>
+                        <small class="timestamp">SCAN TIME: ${new Date(client.last_check).toLocaleTimeString()}</small>
                     `;
                     container.appendChild(div);
                 });
             } catch (error) {
                 console.error(error);
-                document.getElementById('dashboard').innerHTML = "SYSTEM OFFLINE: " + error.message;
+                document.getElementById('dashboard').innerHTML = "<div style='color:red'>SYSTEM OFFLINE. RETRYING...</div>";
             }
         }
         
-        // Run immediately
         fetchStatus();
     </script>
 </body>
