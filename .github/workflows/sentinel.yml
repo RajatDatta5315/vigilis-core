@@ -1,0 +1,32 @@
+name: Vigilis Swarm
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Run every 6 hours
+  workflow_dispatch: # Allows you to click "Run Now" button
+
+permissions:
+  contents: write
+
+jobs:
+  patrol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run The Swarm
+        env:
+          # Add your token in GitHub Repo Settings -> Secrets
+          HF_TOKEN: ${{ secrets.HF_TOKEN }} 
+        run: python vigilis_core.py
+      - name: Commit Database Update
+        run: |
+          git config --global user.name 'Vigilis Sentinel'
+          git config --global user.email 'bot@vigilis.ai'
+          git add database.json
+          git commit -m "Auto-update client status"
+          git push
