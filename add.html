@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INITIALIZE AGENT | VIGILIS</title>
+    <link rel="icon" type="image/png" href="VIGILIS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --neon-green: #00ff41;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Space Grotesk', sans-serif; 
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        h1 { text-align: center; color: var(--neon-green); margin-bottom: 10px; letter-spacing: 2px; }
+        p.desc { text-align: center; color: #888; margin-bottom: 30px; font-size: 0.9rem; }
+
+        .step { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .step-title { font-weight: bold; margin-bottom: 15px; display: block; color: #fff; }
+
+        /* PAYMENT BUTTON */
+        .pay-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #0070ba; /* PayPal Blue */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        .pay-btn:hover { background: #005ea6; }
+
+        /* FORM INPUTS */
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 4px;
+            font-family: inherit;
+            box-sizing: border-box; /* Fixes padding issue */
+        }
+        input:focus { outline: none; border-color: var(--neon-green); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--neon-green);
+            color: #000;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
+
+        .note { font-size: 0.75rem; color: #555; margin-top: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;">
+        <h1>INITIALIZE NODE</h1>
+        <p class="desc">Secure your AI Agent against Hallucinations.</p>
+
+        <div class="step">
+            <span class="step-title">01 // AUTHORIZE PAYMENT ($20)</span>
+            <a href="https://www.paypal.me/RajatDatta482/20USD" target="_blank" class="pay-btn">
+                PAY $20 VIA PAYPAL
+            </a>
+            <div class="note">Payment opens in new tab. Come back here to finish setup.</div>
+        </div>
+
+        <div class="step" style="border:none; padding:0;">
+            <span class="step-title">02 // CONFIGURE AGENT</span>
+            <form id="agentForm">
+                <input type="text" id="txnId" placeholder="PayPal Transaction ID (Verification)" required>
+                <input type="text" id="botName" placeholder="Agent Name (e.g. Support Bot)" required>
+                <input type="url" id="botUrl" placeholder="Agent API URL (Endpoint)" required>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">ACTIVATE MONITORING</button>
+            </form>
+            <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('agentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('msg');
+            
+            btn.innerHTML = "ESTABLISHING UPLINK...";
+            btn.disabled = true;
+
+            const data = {
+                txn_id: document.getElementById('txnId').value,
+                name: document.getElementById('botName').value,
+                url: document.getElementById('botUrl').value
+            };
+
+            // WE WILL PASTE PIPEDREAM URL HERE IN NEXT STEP
+            const WEBHOOK_URL = "YOUR_PIPEDREAM_URL_HERE"; 
+
+            try {
+                if(WEBHOOK_URL === "YOUR_PIPEDREAM_URL_HERE") {
+                    throw new Error("System configuration pending. Contact Admin.");
+                }
+
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                msg.style.color = "#00ff41";
+                msg.innerHTML = "SUCCESS. AGENT QUEUED FOR SCANNING.";
+                btn.innerHTML = "DEPLOYED";
+                
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
+
+            } catch (error) {
+                msg.style.color = "red";
+                msg.innerHTML = "ERROR: " + error.message;
+                btn.innerHTML = "RETRY UPLINK";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
