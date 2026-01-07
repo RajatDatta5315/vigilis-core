@@ -24,14 +24,14 @@
         <div class="kryv-logo">LOGIN WITH <span>KRYV</span></div>
         <p style="color:#888; font-size:0.8rem; margin-bottom:20px;">Exclusive Access for KRYV Network Members</p>
         
-        <input type="email" id="email" placeholder="Email Address">
+        <input type="email" id="email" placeholder="Kryv Email">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">AUTHENTICATE</button>
         <p id="msg" style="margin-top:15px; font-size:0.8rem; color:red;"></p>
     </div>
 
     <script>
-        // KRYV CREDENTIALS (SAFE TO BE PUBLIC AS ANON KEY)
+        // YOUR KRYV SUPABASE KEYS
         const SUPA_URL = "https://oliyqgimiqrqolfbxmlm.supabase.co";
         const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9saXlxZ2ltaXFycW9sZmJ4bWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NTY3NzgsImV4cCI6MjA4MjIzMjc3OH0.ZfStCBJ9_43Tmdy_Nlfn9Z8bVhIqxKsGzDb4AsRXwR0";
         
@@ -51,44 +51,23 @@
             btn.innerHTML = "VERIFYING ID...";
             btn.disabled = true;
             
-            // 1. Try to login via Auth
+            // Try Auth Login
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
 
             if (error) {
-                // If Auth fails, check if user exists in 'profiles' manually (Backup check)
-                // Note: Usually auth is better, but since you mentioned 'profiles' table specifically:
-                const { data: profileData, error: profileError } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('email', email) // Assuming email column exists
-                    .single();
-
-                if(profileData) {
-                     // Found in profiles table (Weak auth simulation if password check is skipped)
-                     // Ideally we stick to auth.signInWithPassword
-                     grantAccess(profileData.id || 'kryv_user');
-                } else {
-                    msg.innerText = "ACCESS DENIED: User not found in KRYV.";
-                    btn.innerHTML = "AUTHENTICATE";
-                    btn.disabled = false;
-                }
+                msg.innerText = "ACCESS DENIED: " + error.message;
+                btn.innerHTML = "AUTHENTICATE";
+                btn.disabled = false;
             } else {
-                grantAccess(data.session.access_token);
+                msg.style.color = "#00ff41";
+                msg.innerText = "IDENTITY CONFIRMED. REDIRECTING...";
+                // Save Session
+                sessionStorage.setItem('kryv_token', data.session.access_token);
+                setTimeout(() => { window.location.href = "add.html"; }, 1500);
             }
-        }
-
-        function grantAccess(token) {
-            const msg = document.getElementById('msg');
-            msg.style.color = "#00ff41";
-            msg.innerText = "IDENTITY CONFIRMED. REDIRECTING...";
-            
-            // Save Session
-            sessionStorage.setItem('kryv_token', token);
-            
-            setTimeout(() => { window.location.href = "add.html"; }, 1500);
         }
     </script>
 </body>
