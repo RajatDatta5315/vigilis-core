@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRYV LOGIN | VIGILIS GATEWAY</title>
+    <link rel="icon" type="image/png" href="VIGILIS.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #050505; --neon-green: #00ff41; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; }
+        .login-box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 350px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box;}
+        button { width: 100%; padding: 12px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px;}
+        .kryv-logo { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 20px; font-weight: bold; color: #fff; }
+        span { color: var(--neon-green); }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="kryv-logo">LOGIN WITH <span>KRYV</span></div>
+        <input type="email" id="email" placeholder="Kryv Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">AUTHENTICATE</button>
+        <p id="msg" style="margin-top:15px; font-size:0.8rem; color:red;"></p>
+    </div>
+
+    <script>
+        // REPLACE WITH YOUR KRYV SUPABASE KEYS
+        const SUPABASE_URL = "TERA_KRYV_URL_YAHAN_DAAL";
+        const SUPABASE_KEY = "TERA_KRYV_ANON_KEY_YAHAN_DAAL";
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.querySelector('button');
+            const msg = document.getElementById('msg');
+
+            btn.innerHTML = "VERIFYING...";
+            
+            // Check Credentials against KRYV DB
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                msg.innerText = "ACCESS DENIED: " + error.message;
+                btn.innerHTML = "AUTHENTICATE";
+            } else {
+                msg.style.color = "#00ff41";
+                msg.innerText = "IDENTITY CONFIRMED. REDIRECTING...";
+                // Save token so they don't have to login again
+                sessionStorage.setItem('kryv_token', data.session.access_token);
+                setTimeout(() => { window.location.href = "add.html"; }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
