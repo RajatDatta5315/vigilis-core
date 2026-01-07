@@ -70,7 +70,7 @@
             color: #fff;
             border-radius: 4px;
             font-family: inherit;
-            box-sizing: border-box; /* Fixes padding issue */
+            box-sizing: border-box; 
         }
         input:focus { outline: none; border-color: var(--neon-green); }
 
@@ -101,17 +101,17 @@
         <p class="desc">Secure your AI Agent against Hallucinations.</p>
 
         <div class="step">
-            <span class="step-title">01 // AUTHORIZE PAYMENT ($20)</span>
+            <span class="step-title">01 // ACTIVATE SUBSCRIPTION ($20/MONTH)</span>
             <a href="https://www.paypal.me/RajatDatta482/20USD" target="_blank" class="pay-btn">
-                PAY $20 VIA PAYPAL
+                SUBSCRIBE VIA PAYPAL ($20)
             </a>
-            <div class="note">Payment opens in new tab. Come back here to finish setup.</div>
+            <div class="note">Secure PayPal Gateway. Subscription is billed monthly.</div>
         </div>
 
         <div class="step" style="border:none; padding:0;">
             <span class="step-title">02 // CONFIGURE AGENT</span>
             <form id="agentForm">
-                <input type="text" id="txnId" placeholder="PayPal Transaction ID (Verification)" required>
+                <input type="text" id="txnId" placeholder="PayPal Transaction ID" required>
                 <input type="text" id="botName" placeholder="Agent Name (e.g. Support Bot)" required>
                 <input type="url" id="botUrl" placeholder="Agent API URL (Endpoint)" required>
                 
@@ -136,14 +136,10 @@
                 url: document.getElementById('botUrl').value
             };
 
-            // WE WILL PASTE PIPEDREAM URL HERE IN NEXT STEP
+            // CORRECTED URL - NO ERROR CHECK BLOCK
             const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
 
             try {
-                if(WEBHOOK_URL === "https://eokaa5x8aag7a5m.m.pipedream.net") {
-                    throw new Error("System configuration pending. Contact Admin.");
-                }
-
                 await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: JSON.stringify(data)
@@ -153,6 +149,7 @@
                 msg.innerHTML = "SUCCESS. AGENT QUEUED FOR SCANNING.";
                 btn.innerHTML = "DEPLOYED";
                 
+                // Redirect back to dashboard after 2 seconds
                 setTimeout(() => {
                     window.location.href = "index.html";
                 }, 2000);
@@ -167,3 +164,4 @@
     </script>
 </body>
 </html>
+
