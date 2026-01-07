@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GENERATE LICENSE | VIGILIS</title>
+    <link rel="icon" type="image/png" href="VIGILIS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #050505; --neon-green: #00ff41; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);}
+        .box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 400px; text-align: center; backdrop-filter: blur(10px); }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; }
+        button { width: 100%; padding: 15px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="color:var(--neon-green)">LICENSE GENERATOR</h2>
+        <p style="color:#888; font-size:0.9rem;">Enter the email you used for payment to receive your access key.</p>
+        
+        <form id="genForm">
+            <input type="email" id="email" placeholder="Your Email Address" required>
+            <button type="submit" id="btn">GENERATE KEY</button>
+        </form>
+        <p id="msg" style="margin-top:20px; font-size:0.9rem;"></p>
+    </div>
+
+    <script>
+        document.getElementById('genForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn');
+            const msg = document.getElementById('msg');
+            const email = document.getElementById('email').value;
+
+            btn.innerHTML = "GENERATING...";
+            btn.disabled = true;
+
+            // PASTE YOUR PIPEDREAM WEBHOOK URL HERE (FROM STEP 2)
+            const URL = "YOUR_NEW_PIPEDREAM_URL_HERE"; 
+
+            try {
+                await fetch(URL, { method: 'POST', body: JSON.stringify({email: email}) });
+                msg.style.color = "#00ff41";
+                msg.innerHTML = "KEY SENT TO EMAIL. CHECK INBOX.";
+                btn.innerHTML = "SENT";
+            } catch (error) {
+                msg.style.color = "red";
+                msg.innerText = "ERROR. CONTACT SUPPORT.";
+            }
+        });
+    </script>
+</body>
+</html>
