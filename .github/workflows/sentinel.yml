@@ -1,8 +1,8 @@
 name: Vigilis Swarm
 on:
   schedule:
-    - cron: '*/15 * * * *' # Runs every 15 mins
-  workflow_dispatch:
+    - cron: '*/15 * * * *' # Run every 15 minutes
+  workflow_dispatch: # Manual Trigger
 
 permissions:
   contents: write
@@ -12,18 +12,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+          
       - name: Install dependencies
-        run: pip install aiohttp huggingface_hub requests
+        # ADDED tweepy HERE
+        run: pip install aiohttp huggingface_hub requests tweepy
+        
       - name: Run The Swarm
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           JSONBIN_ID: ${{ secrets.JSONBIN_ID }}
           JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: python vigilis_core.py
+        
       - name: Publish Public Status
         run: |
           git config --global user.name 'Vigilis Sentinel'
