@@ -2,8 +2,8 @@
   {
     "id": 1,
     "name": "Test Bot",
-    "status": "ERROR",
-    "detail": "Connection Error",
-    "last_check": ""
+    "status": "SECURE",
+    "detail": "Judge Error",
+    "last_check": "2026-01-07T18:29:36.974729"
   }
 ]
