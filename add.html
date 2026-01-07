@@ -2,72 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INITIALIZE AGENT | VIGILIS</title>
     <link rel="icon" type="image/png" href="VIGILIS.png">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script>
-        // SECURITY CHECK: If no KRYV login, Kick out!
+        // SECURITY GATEKEEPER
         if (!sessionStorage.getItem('kryv_token')) {
             window.location.href = "login.html";
         }
     </script>
     <style>
-        /* ... (Same CSS as before) ... */
-        :root { --bg: #050505; --neon-green: #00ff41; --border: rgba(255, 255, 255, 0.1); }
-        body { background-color: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%); }
-        .container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.8); border: 1px solid var(--border); padding: 40px; border-radius: 12px; backdrop-filter: blur(10px); }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        .submit-btn { width: 100%; padding: 15px; background: var(--neon-green); color: #000; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
-        .pay-btn { display: block; width: 100%; padding: 15px; background: #FF5E5B; /* Ko-fi Red */ color: white; text-align: center; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 20px; }
+        :root {
+            --bg: #050505;
+            --neon-green: #00ff41;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Space Grotesk', sans-serif; 
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        h1 { text-align: center; color: var(--neon-green); margin-bottom: 10px; letter-spacing: 2px; }
+        p.desc { text-align: center; color: #888; margin-bottom: 30px; font-size: 0.9rem; }
+
+        .step { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .step-title { font-weight: bold; margin-bottom: 15px; display: block; color: #fff; }
+
+        /* KO-FI BUTTON (Zero Platform Fee) */
+        .pay-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #FF5E5B; /* Ko-fi Brand Color */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .pay-btn:hover { background: #ff413e; box-shadow: 0 0 15px rgba(255, 94, 91, 0.4); }
+
+        /* HIDDEN FORM */
         #formSection { display: none; opacity: 0; transition: opacity 1s ease-in; }
+
+        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        input:focus { outline: none; border-color: var(--neon-green); }
+
+        .submit-btn { width: 100%; padding: 15px; background: var(--neon-green); color: #000; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; transition: 0.3s; }
+        .submit-btn:hover { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
+
+        .note { font-size: 0.75rem; color: #555; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>VIGILIS DASHBOARD</h1>
-        <p style="text-align:center; color:#888;">Logged in via KRYV ID</p>
+        <a href="index.html" style="text-decoration:none;"><img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;"></a>
+        <h1>INITIALIZE NODE</h1>
+        <p class="desc">Secure your AI Agent against Hallucinations.</p>
+        
+        <div style="text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem;">
+            ACCESS GRANTED via KRYV
+        </div>
 
         <div class="step" id="paymentStep">
-            <span style="display:block; margin-bottom:10px; font-weight:bold;">01 // START SUBSCRIPTION ($20/MO)</span>
-            <a href="https://ko-fi.com/" target="_blank" class="pay-btn" onclick="revealForm()">
-                ACTIVATE VIA KO-FI (CARDS/PAYPAL)
+            <span class="step-title">01 // START SUBSCRIPTION ($20)</span>
+            
+            <a href="https://ko-fi.com/drypaper" target="_blank" class="pay-btn" onclick="revealForm()">
+                PAY $20 VIA KO-FI (ZERO FEES)
             </a>
+            
+            <div class="note">We use Ko-fi for 0% platform fees. Pay once for 30 days access.</div>
         </div>
 
         <div id="formSection">
-            <span style="color:var(--neon-green); font-weight:bold;">02 // CONFIGURE AGENT</span>
-            <form id="agentForm" style="margin-top:15px;">
-                <input type="text" id="botName" placeholder="Agent Name" required>
-                <input type="url" id="botUrl" placeholder="API Endpoint URL" required>
-                <button type="submit" class="submit-btn" id="submitBtn">DEPLOY AGENT</button>
-            </form>
-            <div id="msg" style="text-align:center; margin-top:15px;"></div>
+            <div class="step" style="border:none; padding:0;">
+                <span class="step-title" style="color:var(--neon-green)">02 // CONFIGURE AGENT:</span>
+                <form id="agentForm">
+                    <input type="text" id="txnId" placeholder="Payment Name / ID (For Verification)" required>
+                    <input type="text" id="botName" placeholder="Agent Name (e.g. Support Bot)" required>
+                    <input type="url" id="botUrl" placeholder="Agent API URL (Endpoint)" required>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">ACTIVATE MONITORING</button>
+                </form>
+                <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        function revealForm() { setTimeout(() => { document.getElementById('formSection').style.display = "block"; document.getElementById('formSection').style.opacity = "1"; }, 2000); }
+        function revealForm() {
+            setTimeout(() => {
+                const formSec = document.getElementById('formSection');
+                formSec.style.display = "block";
+                setTimeout(() => { formSec.style.opacity = "1"; }, 100);
+            }, 3000); // 3 seconds wait
+        }
 
         document.getElementById('agentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('msg');
-            btn.innerText = "SYNCING..."; btn.disabled = true;
+            
+            btn.innerHTML = "SYNCING WITH GRID...";
+            btn.disabled = true;
 
             const data = {
+                txn_id: document.getElementById('txnId').value,
                 name: document.getElementById('botName').value,
                 url: document.getElementById('botUrl').value
             };
-            
-            // TERA PIPEDREAM URL
-            const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net";
+
+            const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
 
             try {
-                await fetch(WEBHOOK_URL, { method: 'POST', body: JSON.stringify(data) });
-                msg.style.color = "#00ff41"; msg.innerText = "SUCCESS. ACTIVE FOR 30 DAYS.";
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                msg.style.color = "#00ff41";
+                msg.innerHTML = "SUCCESS. AGENT LIVE FOR 30 DAYS.";
+                btn.innerHTML = "DEPLOYED";
+                
                 setTimeout(() => { window.location.href = "index.html"; }, 3000);
+
             } catch (error) {
-                msg.style.color = "red"; msg.innerText = "ERROR"; btn.disabled = false;
+                msg.style.color = "red";
+                msg.innerHTML = "ERROR: " + error.message;
+                btn.innerHTML = "RETRY";
+                btn.disabled = false;
             }
         });
     </script>
