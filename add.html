@@ -7,167 +7,80 @@
     <link rel="icon" type="image/png" href="VIGILIS.png">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script>
-        // SECURITY GATEKEEPER: KRYV LOGIN REQUIRED
+        // SECURITY: KRYV LOGIN REQUIRED
         if (!sessionStorage.getItem('kryv_token')) {
             window.location.href = "login.html";
         }
     </script>
     <style>
-        :root {
-            --bg: #050505;
-            --neon-green: #00ff41;
-            --drypaper-gold: #FFD700; /* Gold color for your Store */
-            --border: rgba(255, 255, 255, 0.1);
-        }
-
-        body { 
-            background-color: var(--bg); 
-            color: #fff; 
-            font-family: 'Space Grotesk', sans-serif; 
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid var(--border);
-            padding: 40px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-        }
-
+        :root { --bg: #050505; --neon-green: #00ff41; --border: rgba(255, 255, 255, 0.1); }
+        body { background-color: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%); }
+        .container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.8); border: 1px solid var(--border); padding: 40px; border-radius: 12px; backdrop-filter: blur(10px); }
         h1 { text-align: center; color: var(--neon-green); margin-bottom: 10px; letter-spacing: 2px; }
-        p.desc { text-align: center; color: #888; margin-bottom: 30px; font-size: 0.9rem; }
-
-        .step { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
-        .step-title { font-weight: bold; margin-bottom: 15px; display: block; color: #fff; }
-
-        /* DRYPAPER BUTTON */
-        .pay-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: #fff; 
-            color: #000;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            transition: 0.3s;
-            cursor: pointer;
-            text-transform: uppercase;
-            border: 2px solid #fff;
-        }
-        .pay-btn:hover { background: #000; color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
-
-        /* HIDDEN FORM */
+        .pay-btn { display: block; width: 100%; padding: 15px; background: #fff; color: #000; text-align: center; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 10px; transition: 0.3s; text-transform: uppercase; border: 2px solid #fff; }
+        .pay-btn:hover { background: #000; color: #fff; }
         #formSection { display: none; opacity: 0; transition: opacity 1s ease-in; }
-
-        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        input:focus { outline: none; border-color: var(--neon-green); }
-
-        .submit-btn { width: 100%; padding: 15px; background: var(--neon-green); color: #000; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; transition: 0.3s; }
-        .submit-btn:hover { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
-
-        .note { font-size: 0.75rem; color: #555; margin-top: 10px; text-align: center; }
-        .kryv-badge { text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem; border:1px solid #333; display:inline-block; padding:5px 10px; border-radius:20px; position:relative; left:50%; transform:translateX(-50%); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; }
+        .submit-btn { width: 100%; padding: 15px; background: var(--neon-green); color: #000; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <a href="index.html" style="text-decoration:none;">
-            <img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;">
-        </a>
-        
+        <a href="index.html"><img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;"></a>
         <h1>INITIALIZE NODE</h1>
-        <p class="desc">Secure your AI Agent against Hallucinations.</p>
-        
-        <div class="kryv-badge">
+        <div style="text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem; border:1px solid #333; display:inline-block; padding:5px 10px; border-radius:20px; position:relative; left:50%; transform:translateX(-50%);">
             <span style="color:var(--neon-green)">●</span> ACCESS GRANTED via KRYV
         </div>
 
         <div class="step" id="paymentStep">
-            <span class="step-title">01 // PURCHASE LICENSE ($20)</span>
-            
-            <a href="https://drypaperhq.com" target="_blank" class="pay-btn" onclick="revealForm()">
-                BUY ON DRYPAPER HQ
-            </a>
-            
-            <div class="note">Secure checkout via Drypaper Store. Copy your Order ID.</div>
+            <span style="font-weight:bold; display:block; margin-bottom:10px;">01 // PURCHASE LICENSE ($20)</span>
+            <a href="https://drypaperhq.com" target="_blank" class="pay-btn" onclick="revealForm()">BUY ON DRYPAPER HQ</a>
+            <div style="font-size:0.75rem; color:#555; text-align:center; margin-top:5px;">After purchase, you will get a License Key.</div>
         </div>
 
         <div id="formSection">
-            <div class="step" style="border:none; padding:0;">
-                <span class="step-title" style="color:var(--neon-green)">02 // ACTIVATE LICENSE:</span>
-                <form id="agentForm">
-                    <input type="text" id="txnId" placeholder="Drypaper Order ID (e.g. #DP-1024)" required>
-                    <input type="text" id="botName" placeholder="Agent Name (e.g. Support Bot)" required>
-                    <input type="url" id="botUrl" placeholder="Agent API URL (Endpoint)" required>
-                    
-                    <button type="submit" class="submit-btn" id="submitBtn">DEPLOY AGENT</button>
-                </form>
-                <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
-            </div>
+            <span style="color:var(--neon-green); font-weight:bold; display:block; margin-bottom:10px;">02 // ACTIVATE AGENT:</span>
+            <form id="agentForm">
+                <input type="text" id="txnId" placeholder="Enter License Key (e.g. VIGILIS-CORE-X92D)" required>
+                <input type="text" id="botName" placeholder="Agent Name" required>
+                <input type="url" id="botUrl" placeholder="Agent API URL" required>
+                <button type="submit" class="submit-btn" id="submitBtn">DEPLOY AGENT</button>
+            </form>
+            <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
         </div>
     </div>
 
     <script>
-        // Reveal form 5 seconds after click (Giving them time to see the store)
         function revealForm() {
             setTimeout(() => {
-                const formSec = document.getElementById('formSection');
-                formSec.style.display = "block";
-                setTimeout(() => { formSec.style.opacity = "1"; }, 100);
-            }, 5000); 
+                const fs = document.getElementById('formSection');
+                fs.style.display = "block";
+                setTimeout(() => { fs.style.opacity = "1"; }, 100);
+            }, 3000); 
         }
 
         document.getElementById('agentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('msg');
-            
-            btn.innerHTML = "VERIFYING LICENSE...";
-            btn.disabled = true;
+            btn.innerHTML = "VERIFYING KEY..."; btn.disabled = true;
 
             const data = {
                 txn_id: document.getElementById('txnId').value,
                 name: document.getElementById('botName').value,
                 url: document.getElementById('botUrl').value
             };
-
-            // YOUR PIPEDREAM WEBHOOK (Already Setup)
+            
+            // YOUR 2ND PIPEDREAM (ADD AGENT) URL - KEEP THE OLD ONE OR CREATE NEW IF NEEDED
+            // Assuming you use the same one from previous step 3 logic.
             const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
 
             try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-
-                msg.style.color = "#00ff41";
-                msg.innerHTML = "LICENSE VERIFIED. AGENT ACTIVE.";
-                btn.innerHTML = "DEPLOYED";
-                
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 3000);
-
+                await fetch(WEBHOOK_URL, { method: 'POST', body: JSON.stringify(data) });
+                msg.style.color = "#00ff41"; msg.innerHTML = "LICENSE VERIFIED. DEPLOYING...";
+                setTimeout(() => { window.location.href = "index.html"; }, 3000);
             } catch (error) {
-                msg.style.color = "red";
-                msg.innerHTML = "ERROR: " + error.message;
-                btn.innerHTML = "RETRY";
-                btn.disabled = false;
+                msg.style.color = "red"; msg.innerHTML = "ERROR"; btn.disabled = false;
             }
         });
     </script>
