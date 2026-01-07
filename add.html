@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="VIGILIS.png">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script>
-        // SECURITY GATEKEEPER
+        // SECURITY GATEKEEPER: KRYV LOGIN REQUIRED
         if (!sessionStorage.getItem('kryv_token')) {
             window.location.href = "login.html";
         }
@@ -16,6 +16,7 @@
         :root {
             --bg: #050505;
             --neon-green: #00ff41;
+            --drypaper-gold: #FFD700; /* Gold color for your Store */
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -49,13 +50,13 @@
         .step { margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
         .step-title { font-weight: bold; margin-bottom: 15px; display: block; color: #fff; }
 
-        /* KO-FI BUTTON (Zero Platform Fee) */
+        /* DRYPAPER BUTTON */
         .pay-btn {
             display: block;
             width: 100%;
             padding: 15px;
-            background: #FF5E5B; /* Ko-fi Brand Color */
-            color: white;
+            background: #fff; 
+            color: #000;
             text-align: center;
             text-decoration: none;
             border-radius: 5px;
@@ -65,8 +66,9 @@
             transition: 0.3s;
             cursor: pointer;
             text-transform: uppercase;
+            border: 2px solid #fff;
         }
-        .pay-btn:hover { background: #ff413e; box-shadow: 0 0 15px rgba(255, 94, 91, 0.4); }
+        .pay-btn:hover { background: #000; color: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
 
         /* HIDDEN FORM */
         #formSection { display: none; opacity: 0; transition: opacity 1s ease-in; }
@@ -78,38 +80,42 @@
         .submit-btn:hover { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
 
         .note { font-size: 0.75rem; color: #555; margin-top: 10px; text-align: center; }
+        .kryv-badge { text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem; border:1px solid #333; display:inline-block; padding:5px 10px; border-radius:20px; position:relative; left:50%; transform:translateX(-50%); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <a href="index.html" style="text-decoration:none;"><img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;"></a>
+        <a href="index.html" style="text-decoration:none;">
+            <img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;">
+        </a>
+        
         <h1>INITIALIZE NODE</h1>
         <p class="desc">Secure your AI Agent against Hallucinations.</p>
         
-        <div style="text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem;">
-            ACCESS GRANTED via KRYV
+        <div class="kryv-badge">
+            <span style="color:var(--neon-green)">●</span> ACCESS GRANTED via KRYV
         </div>
 
         <div class="step" id="paymentStep">
-            <span class="step-title">01 // START SUBSCRIPTION ($20)</span>
+            <span class="step-title">01 // PURCHASE LICENSE ($20)</span>
             
-            <a href="https://ko-fi.com/drypaper" target="_blank" class="pay-btn" onclick="revealForm()">
-                PAY $20 VIA KO-FI (ZERO FEES)
+            <a href="https://drypaperhq.com" target="_blank" class="pay-btn" onclick="revealForm()">
+                BUY ON DRYPAPER HQ
             </a>
             
-            <div class="note">We use Ko-fi for 0% platform fees. Pay once for 30 days access.</div>
+            <div class="note">Secure checkout via Drypaper Store. Copy your Order ID.</div>
         </div>
 
         <div id="formSection">
             <div class="step" style="border:none; padding:0;">
-                <span class="step-title" style="color:var(--neon-green)">02 // CONFIGURE AGENT:</span>
+                <span class="step-title" style="color:var(--neon-green)">02 // ACTIVATE LICENSE:</span>
                 <form id="agentForm">
-                    <input type="text" id="txnId" placeholder="Payment Name / ID (For Verification)" required>
+                    <input type="text" id="txnId" placeholder="Drypaper Order ID (e.g. #DP-1024)" required>
                     <input type="text" id="botName" placeholder="Agent Name (e.g. Support Bot)" required>
                     <input type="url" id="botUrl" placeholder="Agent API URL (Endpoint)" required>
                     
-                    <button type="submit" class="submit-btn" id="submitBtn">ACTIVATE MONITORING</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">DEPLOY AGENT</button>
                 </form>
                 <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
             </div>
@@ -117,12 +123,13 @@
     </div>
 
     <script>
+        // Reveal form 5 seconds after click (Giving them time to see the store)
         function revealForm() {
             setTimeout(() => {
                 const formSec = document.getElementById('formSection');
                 formSec.style.display = "block";
                 setTimeout(() => { formSec.style.opacity = "1"; }, 100);
-            }, 3000); // 3 seconds wait
+            }, 5000); 
         }
 
         document.getElementById('agentForm').addEventListener('submit', async function(e) {
@@ -130,7 +137,7 @@
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('msg');
             
-            btn.innerHTML = "SYNCING WITH GRID...";
+            btn.innerHTML = "VERIFYING LICENSE...";
             btn.disabled = true;
 
             const data = {
@@ -139,6 +146,7 @@
                 url: document.getElementById('botUrl').value
             };
 
+            // YOUR PIPEDREAM WEBHOOK (Already Setup)
             const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
 
             try {
@@ -148,10 +156,12 @@
                 });
 
                 msg.style.color = "#00ff41";
-                msg.innerHTML = "SUCCESS. AGENT LIVE FOR 30 DAYS.";
+                msg.innerHTML = "LICENSE VERIFIED. AGENT ACTIVE.";
                 btn.innerHTML = "DEPLOYED";
                 
-                setTimeout(() => { window.location.href = "index.html"; }, 3000);
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 3000);
 
             } catch (error) {
                 msg.style.color = "red";
