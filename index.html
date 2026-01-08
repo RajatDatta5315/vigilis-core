@@ -50,7 +50,6 @@
             text-decoration: none;
         }
 
-        /* LOGO STYLING */
         .logo-img {
             width: 40px;
             height: 40px;
@@ -65,11 +64,24 @@
             color: #fff;
         }
 
-        /* --- THE GLOWING BUTTON --- */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .nav-item:hover { color: #fff; }
+
         .cta-button {
             background: rgba(0, 255, 65, 0.1);
             color: var(--neon-green);
-            padding: 12px 24px;
+            padding: 10px 20px;
             text-decoration: none;
             font-weight: 700;
             border: 1px solid var(--neon-green);
@@ -77,9 +89,6 @@
             font-size: 0.85rem;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
         }
 
         .cta-button:hover {
@@ -129,7 +138,6 @@
         .card:hover { 
             border-color: #555; 
             transform: translateY(-5px); 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -147,11 +155,10 @@
         }
 
         .dot { width: 8px; height: 8px; border-radius: 50%; }
-
         .detail { color: #888; font-size: 0.9em; line-height: 1.5; margin-bottom: 20px;}
         .timestamp { color: #444; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px;}
 
-        /* COLORS */
+        /* STATUS COLORS */
         .SECURE .dot { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
         .SECURE .status-indicator { color: var(--neon-green); border: 1px solid rgba(0,255,65,0.2); }
         
@@ -159,7 +166,7 @@
         .COMPROMISED .status-indicator { color: var(--neon-red); border: 1px solid rgba(255,51,51,0.2); }
 
         .ERROR, .OFFLINE .dot { background: var(--neon-orange); }
-        .ERROR .status-indicator, .OFFLINE .status-indicator { color: var(--neon-orange); border: 1px solid rgba(255,170,0,0.2); }
+        .ERROR .status-indicator { color: var(--neon-orange); border: 1px solid rgba(255,170,0,0.2); }
 
     </style>
 </head>
@@ -170,25 +177,27 @@
             <img src="VIGILIS.png" class="logo-img" id="brand-logo">
             <div class="logo-text">VIGILIS</div>
         </a>
-        <a href="add.html" class="cta-button">Initialize Agent +</a>
+        <div class="nav-links">
+            <a href="generate.html" class="nav-item">Get License Key</a>
+            <a href="add.html" class="cta-button">Initialize Agent +</a>
+        </div>
     </nav>
 
     <div class="hero">
         <div style="margin-bottom: 20px;"><span class="status-badge-main">SYSTEM ONLINE</span></div>
         <h2>Global AI Defense Grid</h2>
-        <p style="color: #666; font-size: 0.9rem;">Automated Hallucination & Compromise Detection</p>
+        <p style="color: #666; font-size: 0.9rem;">Real-time Hallucination Monitoring for AI Agents</p>
     </div>
 
     <div class="container">
         <div id="dashboard" class="grid">
-            <div style="color: #666;">Establishing Neural Handshake...</div>
+            <div style="color: #666;">Loading Grid Data...</div>
         </div>
     </div>
 
     <script>
         async function fetchStatus() {
             try {
-                // Fetch public status file
                 const response = await fetch('status_public.json?t=' + new Date().getTime());
                 if (!response.ok) throw new Error("Uplink Failed");
                 const data = await response.json();
@@ -214,7 +223,7 @@
                             </div>
                         </div>
                         <p class="detail">Log: ${client.detail}</p>
-                        <small class="timestamp">SCAN ID: ${new Date(client.last_check).getTime().toString().slice(-6)} // ${new Date(client.last_check).toLocaleTimeString()}</small>
+                        <small class="timestamp">SCAN ID: ${new Date(client.last_check).getTime().toString().slice(-6)}</small>
                     `;
                     container.appendChild(div);
                 });
@@ -223,10 +232,7 @@
                 document.getElementById('dashboard').innerHTML = "<div style='color:var(--neon-orange)'>AWAITING DATA STREAM...</div>";
             }
         }
-        
-        // Run immediately
         fetchStatus();
     </script>
 </body>
 </html>
-
