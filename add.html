@@ -6,65 +6,48 @@
     <link rel="icon" type="image/png" href="VIGILIS.png">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <script>
-        // SECURITY: KRYV LOGIN REQUIRED
-        if (!sessionStorage.getItem('kryv_token')) {
-            window.location.href = "login.html";
-        }
+        if (!sessionStorage.getItem('kryv_token')) window.location.href = "login.html";
     </script>
     <style>
-        :root { --bg: #050505; --neon-green: #00ff41; --border: rgba(255, 255, 255, 0.1); }
-        body { background-color: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 100%); }
-        .container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.8); border: 1px solid var(--border); padding: 40px; border-radius: 12px; backdrop-filter: blur(10px); }
-        h1 { text-align: center; color: var(--neon-green); margin-bottom: 10px; letter-spacing: 2px; }
-        
-        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing:border-box;}
-        .submit-btn { width: 100%; padding: 15px; background: var(--neon-green); color: #000; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
-        
-        .get-key-link { display:block; text-align:center; color:#888; font-size:0.8rem; margin-bottom:20px; text-decoration:underline; cursor:pointer;}
+        :root { --bg: #050505; --neon-green: #00ff41; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.9); border: 1px solid #333; padding: 40px; border-radius: 12px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing:border-box;}
+        button { width: 100%; padding: 15px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html"><img src="VIGILIS.png" style="width: 50px; display: block; margin: 0 auto 20px auto;"></a>
-        <h1>ACTIVATE NODE</h1>
-        
-        <div style="text-align:center; margin-bottom:20px; color:#888; font-size:0.8rem; border:1px solid #333; display:inline-block; padding:5px 10px; border-radius:20px; position:relative; left:50%; transform:translateX(-50%);">
-            <span style="color:var(--neon-green)">●</span> ACCESS GRANTED via KRYV
-        </div>
-
-        <a href="generate.html" class="get-key-link">Don't have a Key? Generate one here</a>
-
+        <h2 style="color:var(--neon-green); text-align:center;">ACTIVATE MONITORING</h2>
         <form id="agentForm">
             <input type="text" id="txnId" placeholder="Paste License Key (Check Email)" required>
-            <input type="text" id="botName" placeholder="Agent Name (e.g. My Support Bot)" required>
-            <input type="url" id="botUrl" placeholder="Agent API URL" required>
-            
-            <button type="submit" class="submit-btn" id="submitBtn">START MONITORING</button>
+            <input type="text" id="botName" placeholder="Bot Name" required>
+            <input type="url" id="botUrl" placeholder="Bot API URL" required>
+            <button type="submit" id="btn">START SCANNING</button>
         </form>
-        <div id="msg" style="text-align:center; margin-top:15px; font-size:0.9rem;"></div>
+        <p id="msg" style="text-align:center; margin-top:15px;"></p>
     </div>
 
     <script>
         document.getElementById('agentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
+            const btn = document.getElementById('btn');
             const msg = document.getElementById('msg');
-            btn.innerHTML = "VERIFYING KEY..."; btn.disabled = true;
+            btn.innerHTML = "DEPLOYING..."; btn.disabled = true;
 
             const data = {
                 txn_id: document.getElementById('txnId').value,
                 name: document.getElementById('botName').value,
                 url: document.getElementById('botUrl').value
             };
-            
-            // YOUR 2ND PIPEDREAM (ADD AGENT) URL
-            // Ensure this is the Pipedream Workflow that ADDS data to JsonBin
-            const WEBHOOK_URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
+
+            // Pipedream Webhook for Adding Client
+            const URL = "https://eokaa5x8aag7a5m.m.pipedream.net"; 
 
             try {
-                await fetch(WEBHOOK_URL, { method: 'POST', body: JSON.stringify(data) });
-                msg.style.color = "#00ff41"; msg.innerHTML = "LICENSE ACCEPTED. DEPLOYING...";
-                setTimeout(() => { window.location.href = "index.html"; }, 3000);
+                await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
+                msg.style.color = "#00ff41"; msg.innerHTML = "DEPLOYED SUCCESSFULLY.";
+                setTimeout(() => { window.location.href = "index.html"; }, 2000);
             } catch (error) {
                 msg.style.color = "red"; msg.innerHTML = "ERROR"; btn.disabled = false;
             }
@@ -72,4 +55,3 @@
     </script>
 </body>
 </html>
-
