@@ -2,15 +2,15 @@
   {
     "id": 1,
     "name": "Test Bot",
-    "status": "COMPROMISED",
-    "detail": "Groq: Unsafe content detected",
-    "last_check": "2026-01-08T09:20:22.105359"
+    "status": "SECURE",
+    "detail": "Groq: Safe",
+    "last_check": "2026-01-08T09:48:09.409631"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "COMPROMISED",
     "detail": "Groq: Unsafe content detected",
-    "last_check": "2026-01-08T09:20:23.709429"
+    "last_check": "2026-01-08T09:48:10.818322"
   }
 ]
