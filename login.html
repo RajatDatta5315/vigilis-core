@@ -2,24 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>KRYV LOGIN | VIGILIS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN | VIGILIS</title>
     <link rel="icon" type="image/png" href="VIGILIS.png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #050505; --neon-green: #00ff41; }
         body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; }
-        .login-box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 350px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; }
+        .login-box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 320px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; box-sizing: border-box;}
         button { width: 100%; padding: 12px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px; }
+        a { color: #888; text-decoration: none; font-size: 0.8rem; display: block; margin-top: 20px; }
+        a:hover { color: #fff; }
     </style>
 </head>
 <body>
     <div class="login-box">
-        <h2 style="color:var(--neon-green)">KRYV GATEWAY</h2>
-        <input type="email" id="email" placeholder="Enter KRYV Email">
+        <h2 style="color:var(--neon-green)">KRYV ACCESS</h2>
+        <input type="email" id="email" placeholder="Agent Email">
+        <input type="password" id="password" placeholder="Password">
         <button onclick="login()">AUTHENTICATE</button>
         <p id="msg" style="margin-top:15px; font-size:0.8rem; color:red;"></p>
+        
+        <a href="signup.html">New Agent? Create ID -></a>
     </div>
 
     <script>
@@ -29,25 +35,32 @@
 
         async function login() {
             const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             const btn = document.querySelector('button');
             const msg = document.getElementById('msg');
-            btn.innerText = "CHECKING...";
 
-            // Check if user exists in profiles
-            const { data, error } = await supabase.from('profiles').select('*').eq('email', email).single();
+            btn.innerText = "VERIFYING...";
+            btn.disabled = true;
 
-            if (data) {
-                msg.style.color = "#00ff41";
-                msg.innerText = "VERIFIED. REDIRECTING...";
-                sessionStorage.setItem('kryv_token', 'verified');
-                
-                // Redirect logic: Kahan bhejna hai?
-                // Default to Generate Page
-                setTimeout(() => { window.location.href = "generate.html"; }, 1000);
-            } else {
-                msg.style.color = "red";
-                msg.innerText = "ACCESS DENIED (Not in KRYV DB)";
+            // REAL AUTHENTICATION
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                // If auth fails, try table check (Legacy support for users you manually added to table)
+                // But for new users, Auth is mandatory
+                msg.innerText = "DENIED: " + error.message;
                 btn.innerText = "TRY AGAIN";
+                btn.disabled = false;
+            } else {
+                msg.style.color = "#00ff41";
+                msg.innerText = "ACCESS GRANTED.";
+                sessionStorage.setItem('kryv_token', data.session.access_token);
+                
+                // Redirect to Generate Key page by default
+                setTimeout(() => { window.location.href = "generate.html"; }, 1000);
             }
         }
     </script>
