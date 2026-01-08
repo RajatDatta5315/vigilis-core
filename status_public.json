@@ -4,13 +4,13 @@
     "name": "Test Bot",
     "status": "ERROR",
     "detail": "Judges Unresponsive",
-    "last_check": "2026-01-08T06:47:07.361744"
+    "last_check": "2026-01-08T06:55:06.828434"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "ERROR",
     "detail": "Judges Unresponsive",
-    "last_check": "2026-01-08T06:47:03.327286"
+    "last_check": "2026-01-08T06:55:07.027720"
   }
 ]
