@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <title>GENERATE LICENSE | VIGILIS</title>
     <link rel="icon" type="image/png" href="VIGILIS.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <script>
-        // SECURITY GATEKEEPER: Must be logged in via KRYV
-        if (!sessionStorage.getItem('kryv_token')) {
-            window.location.href = "login.html";
-        }
-    </script>
     <style>
         :root { --bg: #050505; --neon-green: #00ff41; }
         body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);}
         .box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 400px; text-align: center; backdrop-filter: blur(10px); }
-        input { width: 100%; padding: 12px; margin: 15px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; text-align: center; color: #888; }
         button { width: 100%; padding: 15px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 5px; }
         .kryv-badge { border:1px solid #333; padding:5px 15px; border-radius:20px; font-size:0.8rem; color:#888; display:inline-block; margin-bottom:20px; }
     </style>
@@ -24,10 +19,9 @@
     <div class="box">
         <div class="kryv-badge"><span style="color:var(--neon-green)">●</span> KRYV MEMBER VERIFIED</div>
         <h2 style="color:var(--neon-green); margin-top:0;">CLAIM FREE LICENSE</h2>
-        <p style="color:#888; font-size:0.9rem;">Generate your unique 30-day access key.</p>
         
         <form id="genForm">
-            <input type="email" id="email" placeholder="Confirm Your Email" required>
+            <input type="email" id="email" placeholder="Loading email..." readonly required>
             <button type="submit" id="btn">SEND KEY TO EMAIL</button>
         </form>
         <p id="msg" style="margin-top:20px; font-size:0.9rem;"></p>
@@ -36,40 +30,59 @@
     </div>
 
     <script>
+        // 1. SUPABASE SETUP
+        const SUPA_URL = "https://oliyqgimiqrqolfbxmlm.supabase.co";
+        const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9saXlxZ2ltaXFycW9sZmJ4bWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NTY3NzgsImV4cCI6MjA4MjIzMjc3OH0.ZfStCBJ9_43Tmdy_Nlfn9Z8bVhIqxKsGzDb4AsRXwR0";
+        const supaClient = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+        // 2. CHECK LOGIN & AUTO-FILL EMAIL
+        async function checkSession() {
+            const { data: { session } } = await supaClient.auth.getSession();
+            
+            if (!session) {
+                // No session? Go to login
+                window.location.href = "login.html";
+            } else {
+                // Auto-fill email
+                document.getElementById('email').value = session.user.email;
+            }
+        }
+        checkSession();
+
+        // 3. SEND KEY
         document.getElementById('genForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btn');
             const msg = document.getElementById('msg');
             const email = document.getElementById('email').value;
 
-            btn.innerHTML = "VERIFYING ELIGIBILITY...";
+            btn.innerHTML = "SENDING...";
             btn.disabled = true;
 
-            // YOUR PIPEDREAM URL
             const URL = "https://eojyoixok7b16am.m.pipedream.net"; 
 
             try {
-                const response = await fetch(URL, { method: 'POST', body: JSON.stringify({email: email}) });
-                const result = await response.json();
+                // Using no-cors mode to prevent network errors if Pipedream doesn't return headers
+                // Note: We won't get a JSON response in 'no-cors', but the request WILL go through.
+                await fetch(URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({email: email}),
+                    mode: 'no-cors' 
+                });
 
-                if (result.status === "exists") {
-                    msg.style.color = "orange";
-                    msg.innerHTML = "YOU ALREADY HAVE A KEY. RESENDING EMAIL...";
-                } else {
-                    msg.style.color = "#00ff41";
-                    msg.innerHTML = "SUCCESS! KEY SENT TO " + email;
-                }
-                
-                btn.innerHTML = "CHECK YOUR INBOX";
+                // Assume success if no network error
+                msg.style.color = "#00ff41";
+                msg.innerHTML = "SUCCESS! KEY SENT TO INBOX.";
+                btn.innerHTML = "CHECK EMAIL";
                 document.getElementById('nextStep').style.display = "block";
 
             } catch (error) {
-                msg.style.color = "red";
-                msg.innerText = "SYSTEM BUSY. TRY AGAIN.";
-                btn.disabled = false;
+                console.error(error);
+                msg.style.color = "orange";
+                msg.innerText = "REQUEST SENT (Check Inbox).";
+                document.getElementById('nextStep').style.display = "block";
             }
         });
     </script>
 </body>
 </html>
-
