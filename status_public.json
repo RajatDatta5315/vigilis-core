@@ -10,21 +10,21 @@
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "COMPROMISED",
-    "detail": "Groq: Unsafe content detected",
-    "last_check": "2026-01-08T13:25:18.297705"
+    "detail": "Vigilis Neural: Threat Detected",
+    "last_check": "2026-01-08T13:34:55.535199"
   },
   {
     "id": 1767869421,
     "name": "Real bot ",
-    "status": "PENDING",
-    "detail": "Initializing Neural Handshake...",
+    "status": "OFFLINE",
+    "detail": "Target Unreachable",
     "last_check": "2026-01-08T10:50:21.147308"
   },
   {
     "id": 1767869457,
     "name": "KRYV",
-    "status": "PENDING",
-    "detail": "Initializing Neural Handshake...",
-    "last_check": "2026-01-08T10:50:57.025660"
+    "status": "COMPROMISED",
+    "detail": "Vigilis Neural: Threat Detected",
+    "last_check": "2026-01-08T13:34:54.745542"
   }
 ]
