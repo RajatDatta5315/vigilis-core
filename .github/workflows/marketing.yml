@@ -1,0 +1,25 @@
+name: Vigilis Marketing Hunter
+on:
+  schedule:
+    - cron: '0 9 * * *' # Runs once every day at 9:00 UTC
+  workflow_dispatch: # Allows manual run button
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: pip install googlesearch-python
+        
+      - name: Run Hunter Bot
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        run: python marketing_bot.py
