@@ -1,8 +1,8 @@
 name: Vigilis Marketing Hunter
 on:
   schedule:
-    - cron: '0 9 * * *' # Runs once every day at 9:00 UTC
-  workflow_dispatch: # Allows manual run button
+    - cron: '0 15 * * *' # Runs at 15:00 UTC (10 AM New York Time)
+  workflow_dispatch: # Manual Button
 
 jobs:
   hunt:
@@ -16,10 +16,12 @@ jobs:
           python-version: '3.9'
           
       - name: Install dependencies
-        run: pip install googlesearch-python
+        # Added requests (for Groq) and googlesearch
+        run: pip install requests googlesearch-python
         
       - name: Run Hunter Bot
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }} # Added Groq Key
         run: python marketing_bot.py
