@@ -2,16 +2,16 @@
   {
     "id": 1,
     "name": "Test Bot",
-    "status": "SECURE",
-    "detail": "Groq: Safe",
-    "last_check": "2026-01-08T09:48:09.409631"
+    "status": "COMPROMISED",
+    "detail": "Vigilis Neural: Threat Detected",
+    "last_check": "2026-01-08T18:17:18.023514"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "COMPROMISED",
     "detail": "Vigilis Neural: Threat Detected",
-    "last_check": "2026-01-08T17:49:30.524802"
+    "last_check": "2026-01-08T18:17:16.577276"
   },
   {
     "id": 1767869421,
@@ -25,6 +25,6 @@
     "name": "KRYV",
     "status": "COMPROMISED",
     "detail": "Vigilis Neural: Threat Detected",
-    "last_check": "2026-01-08T13:34:54.745542"
+    "last_check": "2026-01-08T18:17:19.409819"
   }
 ]
