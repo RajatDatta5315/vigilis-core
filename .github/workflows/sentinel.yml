@@ -2,7 +2,7 @@ name: Vigilis Swarm
 on:
   schedule:
     - cron: '*/15 * * * *' # Run every 15 minutes
-  workflow_dispatch: # Manual Trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,8 +19,8 @@ jobs:
           python-version: '3.9'
           
       - name: Install dependencies
-        # ADDED tweepy HERE
-        run: pip install aiohttp huggingface_hub requests tweepy
+        # Added tweepy, googlesearch-python, etc.
+        run: pip install aiohttp huggingface_hub requests tweepy googlesearch-python
         
       - name: Run The Swarm
         env:
@@ -43,4 +43,3 @@ jobs:
           git add status_public.json
           git commit -m "Update public status" || exit 0
           git push
-
