@@ -12,7 +12,8 @@
         body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; }
         .box { background: rgba(20,20,20,0.9); padding: 30px; border: 1px solid #333; border-radius: 10px; width: 320px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; box-sizing: border-box;}
-        button { width: 100%; padding: 12px; background: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px; text-transform:uppercase; }
+        button { width: 100%; padding: 12px; background: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px; text-transform:uppercase; transition:0.3s;}
+        button:hover { background: var(--neon-green); }
         a { color: var(--neon-green); text-decoration: none; font-size: 0.8rem; display: block; margin-top: 15px; }
     </style>
 </head>
@@ -24,7 +25,7 @@
         <input type="email" id="email" placeholder="Agent Email (e.g. name@gmail.com)" required>
         <input type="password" id="password" placeholder="Password (Min 6 chars)" required>
         
-        <button onclick="signup()">CREATE ID</button>
+        <button id="btn" onclick="signup()">CREATE ID</button>
         <p id="msg" style="margin-top:15px; font-size:0.8rem; color:red;"></p>
         
         <a href="login.html">Already have an ID? Login -></a>
@@ -33,12 +34,14 @@
     <script>
         const SUPA_URL = "https://oliyqgimiqrqolfbxmlm.supabase.co";
         const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9saXlxZ2ltaXFycW9sZmJ4bWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NTY3NzgsImV4cCI6MjA4MjIzMjc3OH0.ZfStCBJ9_43Tmdy_Nlfn9Z8bVhIqxKsGzDb4AsRXwR0";
-        const supabase = supabase.createClient(SUPA_URL, SUPA_KEY);
+        
+        // FIX: Using a distinct variable name 'supaClient' to avoid collision
+        const supaClient = supabase.createClient(SUPA_URL, SUPA_KEY);
 
         async function signup() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const btn = document.querySelector('button');
+            const btn = document.getElementById('btn');
             const msg = document.getElementById('msg');
 
             if (password.length < 6) {
@@ -46,22 +49,30 @@
                 return;
             }
 
-            btn.innerText = "CREATING AGENT...";
+            btn.innerText = "CREATING...";
             btn.disabled = true;
+            msg.innerText = ""; // Clear errors
 
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-            });
+            try {
+                const { data, error } = await supaClient.auth.signUp({
+                    email: email,
+                    password: password,
+                });
 
-            if (error) {
-                msg.innerText = "ERROR: " + error.message;
-                btn.innerText = "TRY AGAIN";
+                if (error) {
+                    msg.innerText = error.message;
+                    btn.innerText = "TRY AGAIN";
+                    btn.disabled = false;
+                } else {
+                    msg.style.color = "#00ff41";
+                    msg.innerText = "SUCCESS! ID CREATED. LOGGING IN...";
+                    
+                    // Auto Login Effect
+                    setTimeout(() => { window.location.href = "login.html"; }, 2000);
+                }
+            } catch (err) {
+                msg.innerText = "System Error: " + err.message;
                 btn.disabled = false;
-            } else {
-                msg.style.color = "#00ff41";
-                msg.innerText = "SUCCESS! ID CREATED. LOGGING IN...";
-                setTimeout(() => { window.location.href = "login.html"; }, 2000);
             }
         }
     </script>
