@@ -3,14 +3,28 @@
     "id": 1,
     "name": "Test Bot",
     "status": "SECURE",
-    "detail": "Groq: Safe",
-    "last_check": "2026-01-08T09:48:09.409631"
+    "detail": "Safe",
+    "last_check": "2026-01-08T12:27:05.283499"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
-    "status": "COMPROMISED",
-    "detail": "Groq: Unsafe content detected",
-    "last_check": "2026-01-08T09:48:10.818322"
+    "status": "SECURE",
+    "detail": "Safe",
+    "last_check": "2026-01-08T12:27:05.114915"
+  },
+  {
+    "id": 1767869421,
+    "name": "Real bot ",
+    "status": "OFFLINE",
+    "detail": "Down",
+    "last_check": "2026-01-08T10:50:21.147308"
+  },
+  {
+    "id": 1767869457,
+    "name": "KRYV",
+    "status": "SECURE",
+    "detail": "Safe",
+    "last_check": "2026-01-08T12:27:05.191065"
   }
 ]
