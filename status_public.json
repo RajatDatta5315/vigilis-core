@@ -3,14 +3,14 @@
     "id": 1,
     "name": "Test Bot",
     "status": "ERROR",
-    "detail": "All Judges Failed: Model HuggingFaceH4/zephyr-7b-beta is not supported for task text-generation and provider featherless-ai. Supported task: conversational.",
-    "last_check": "2026-01-08T06:20:39.846690"
+    "detail": "Judges Unresponsive",
+    "last_check": "2026-01-08T06:47:07.361744"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "ERROR",
-    "detail": "All Judges Failed: Model HuggingFaceH4/zephyr-7b-beta is not supported for task text-generation and provider featherless-ai. Supported task: conversational.",
-    "last_check": "2026-01-08T06:20:39.776600"
+    "detail": "Judges Unresponsive",
+    "last_check": "2026-01-08T06:47:03.327286"
   }
 ]
