@@ -9,29 +9,27 @@ import json
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_PASS = os.environ.get("EMAIL_PASS")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") # Built-in Action Token
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") 
 
 def generate_professional_email(repo_name, owner_name):
     """Uses Groq to write a Context-Aware B2B Email"""
     if not GROQ_API_KEY:
-        return f"Subject: Security check for {repo_name}\n\nHi {owner_name},\n\nI saw your AI project {repo_name}. You can check its safety for free at https://vigilis.kryv.network\n\n- Vigilis Team"
+        return f"Subject: Security check for {repo_name}\n\nHi {owner_name},\n\nI saw your AI project {repo_name}. Check its safety for free at https://vigilis.kryv.network\n\n- Vigilis Team"
         
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
     
-    # PROMPT: Professional, Relatable, Not Spammy
     prompt = f"""
-    Write a cold email to {owner_name}, the developer of an AI project named '{repo_name}'.
-    
-    Context: You are a fellow developer who built 'Vigilis' (a security tool).
-    Observation: You noticed many AI agents leak data or hallucinate.
-    Offer: A free 30-day pass to monitor '{repo_name}' using Vigilis. No credit card needed.
-    Tone: Professional, concise (under 80 words), respectful.
+    Write a cold email to {owner_name}, developer of AI project '{repo_name}'.
+    Context: You built 'Vigilis', a security tool for AI agents.
+    Observation: AI agents often hallucinate.
+    Offer: Free 30-day monitor for '{repo_name}'.
+    Tone: Professional, short (under 80 words), no fluff.
     Link: https://vigilis.kryv.network
     
     Output Format:
-    Subject: [Write a catchy subject]
-    Body: [Write the body]
+    Subject: [Subject]
+    Body: [Body]
     """
     
     payload = {
@@ -45,7 +43,7 @@ def generate_professional_email(repo_name, owner_name):
         content = resp.json()['choices'][0]['message']['content'].strip()
         return content
     except:
-        return f"Subject: AI Safety for {repo_name}\n\nHi {owner_name},\n\nCheck {repo_name} for hallucinations using Vigilis: https://vigilis.kryv.network"
+        return f"Subject: Safety Scan for {repo_name}\n\nHi {owner_name},\n\nCheck {repo_name} for hallucinations: https://vigilis.kryv.network"
 
 def send_email(target_email, subject, body):
     msg = MIMEText(body)
@@ -65,27 +63,29 @@ def send_email(target_email, subject, body):
         return False
 
 def hunt_github_leads():
-    print("🔎 Scanning GitHub for AI Bot Owners...")
+    print("🔎 Scanning GitHub (Deep Scan 100 Repos)...")
     
     if not GITHUB_TOKEN:
-        print("❌ No GitHub Token found.")
+        print("❌ No GitHub Token.")
         return
 
     headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"}
     
-    # SEARCH QUERY: Recently updated Chatbots/AI agents
+    # INCREASED SCAN LIMIT TO 100
     query = "topic:chatbot topic:ai-agent pushed:>2024-01-01"
-    search_url = f"https://api.github.com/search/repositories?q={query}&sort=updated&order=desc&per_page=20"
+    search_url = f"https://api.github.com/search/repositories?q={query}&sort=updated&order=desc&per_page=100"
     
     try:
         resp = requests.get(search_url, headers=headers)
         repos = resp.json().get('items', [])
     except Exception as e:
-        print(f"❌ GitHub Search Failed: {e}")
+        print(f"❌ Search Failed: {e}")
         return
 
     sent_count = 0
-    MAX_EMAILS = 5 # Safety Limit
+    MAX_EMAILS = 5 # Strict Safety Limit
+
+    print(f"🔍 Found {len(repos)} updated repos. Filtering for public emails...")
 
     for repo in repos:
         if sent_count >= MAX_EMAILS: break
@@ -93,7 +93,6 @@ def hunt_github_leads():
         owner_url = repo['owner']['url']
         repo_name = repo['name']
         
-        # Get Owner Details (to find email)
         try:
             user_resp = requests.get(owner_url, headers=headers)
             user_data = user_resp.json()
@@ -101,32 +100,28 @@ def hunt_github_leads():
             email = user_data.get('email')
             name = user_data.get('name') or user_data.get('login')
             
-            # Filter: Must have public email & be a User (not Organization)
             if email and user_data['type'] == 'User':
-                print(f"🎯 Found Target: {name} (Project: {repo_name})")
+                print(f"🎯 Target Acquired: {name} ({repo_name})")
                 
-                # Generate AI Content
-                email_content = generate_professional_email(repo_name, name)
+                content = generate_professional_email(repo_name, name)
                 
-                # Parse Subject/Body
-                if "Subject:" in email_content:
-                    parts = email_content.split("Body:")
+                if "Subject:" in content:
+                    parts = content.split("Body:")
                     subject = parts[0].replace("Subject:", "").strip()
                     body = parts[1].strip() if len(parts) > 1 else parts[0]
                 else:
-                    subject = f"Question about {repo_name}"
-                    body = email_content
+                    subject = f"Dev Question: {repo_name}"
+                    body = content
 
-                # Send
                 if send_email(email, subject, body):
-                    print(f"✅ Email Sent to {email}")
+                    print(f"✅ Sent to {email}")
                     sent_count += 1
-                    time.sleep(10) # Polite delay
+                    time.sleep(10)
             
         except:
             continue
 
-    print(f"🏁 Marketing Run Complete. Emails Sent: {sent_count}")
+    print(f"🏁 Run Complete. Total Sent: {sent_count}")
 
 if __name__ == "__main__":
     hunt_github_leads()
