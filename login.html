@@ -12,7 +12,8 @@
         body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', sans-serif; display: flex; height: 100vh; justify-content: center; align-items: center; margin: 0; }
         .login-box { background: rgba(20,20,20,0.9); padding: 40px; border: 1px solid #333; border-radius: 10px; width: 320px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 5px; outline:none; box-sizing: border-box;}
-        button { width: 100%; padding: 12px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px; }
+        button { width: 100%; padding: 12px; background: var(--neon-green); border: none; font-weight: bold; cursor: pointer; margin-top: 10px; border-radius: 5px; transition:0.3s; }
+        button:hover { box-shadow: 0 0 10px var(--neon-green); }
         a { color: #888; text-decoration: none; font-size: 0.8rem; display: block; margin-top: 20px; }
         a:hover { color: #fff; }
     </style>
@@ -22,7 +23,7 @@
         <h2 style="color:var(--neon-green)">KRYV ACCESS</h2>
         <input type="email" id="email" placeholder="Agent Email">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">AUTHENTICATE</button>
+        <button id="btn" onclick="login()">AUTHENTICATE</button>
         <p id="msg" style="margin-top:15px; font-size:0.8rem; color:red;"></p>
         
         <a href="signup.html">New Agent? Create ID -></a>
@@ -31,36 +32,42 @@
     <script>
         const SUPA_URL = "https://oliyqgimiqrqolfbxmlm.supabase.co";
         const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9saXlxZ2ltaXFycW9sZmJ4bWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY2NTY3NzgsImV4cCI6MjA4MjIzMjc3OH0.ZfStCBJ9_43Tmdy_Nlfn9Z8bVhIqxKsGzDb4AsRXwR0";
-        const supabase = supabase.createClient(SUPA_URL, SUPA_KEY);
+        
+        // FIX: Using 'supaClient' to avoid collision with 'supabase' library name
+        const supaClient = supabase.createClient(SUPA_URL, SUPA_KEY);
 
         async function login() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const btn = document.querySelector('button');
+            const btn = document.getElementById('btn');
             const msg = document.getElementById('msg');
 
             btn.innerText = "VERIFYING...";
             btn.disabled = true;
+            msg.innerText = "";
 
-            // REAL AUTHENTICATION
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            try {
+                // REAL AUTHENTICATION
+                const { data, error } = await supaClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
 
-            if (error) {
-                // If auth fails, try table check (Legacy support for users you manually added to table)
-                // But for new users, Auth is mandatory
-                msg.innerText = "DENIED: " + error.message;
-                btn.innerText = "TRY AGAIN";
+                if (error) {
+                    msg.innerText = "DENIED: " + error.message;
+                    btn.innerText = "TRY AGAIN";
+                    btn.disabled = false;
+                } else {
+                    msg.style.color = "#00ff41";
+                    msg.innerText = "ACCESS GRANTED.";
+                    sessionStorage.setItem('kryv_token', data.session.access_token);
+                    
+                    // Redirect to Generate Key page by default
+                    setTimeout(() => { window.location.href = "generate.html"; }, 1000);
+                }
+            } catch (err) {
+                msg.innerText = "System Error: " + err.message;
                 btn.disabled = false;
-            } else {
-                msg.style.color = "#00ff41";
-                msg.innerText = "ACCESS GRANTED.";
-                sessionStorage.setItem('kryv_token', data.session.access_token);
-                
-                // Redirect to Generate Key page by default
-                setTimeout(() => { window.location.href = "generate.html"; }, 1000);
             }
         }
     </script>
