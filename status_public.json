@@ -4,14 +4,14 @@
     "name": "Test Bot",
     "status": "COMPROMISED",
     "detail": "Vigilis Neural: Threat Detected",
-    "last_check": "2026-01-10T06:50:33.471557"
+    "last_check": "2026-01-10T12:22:07.978757"
   },
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
     "status": "COMPROMISED",
     "detail": "Vigilis Neural: Threat Detected",
-    "last_check": "2026-01-10T11:47:04.210104"
+    "last_check": "2026-01-10T12:22:09.532472"
   },
   {
     "id": 1767869421,
@@ -25,6 +25,6 @@
     "name": "KRYV",
     "status": "COMPROMISED",
     "detail": "Vigilis Neural: Threat Detected",
-    "last_check": "2026-01-10T06:50:34.558775"
+    "last_check": "2026-01-10T12:22:06.501727"
   }
 ]
