@@ -9,8 +9,8 @@
   {
     "id": 1767847025,
     "name": "Test Trap Bot",
-    "status": "COMPROMISED",
-    "detail": "Vigilis Neural: Threat Detected",
+    "status": "OFFLINE",
+    "detail": "Target Unreachable",
     "last_check": "2026-01-12T23:10:36.901482"
   },
   {
