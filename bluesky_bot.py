@@ -1,51 +1,82 @@
 import os
 import requests
 import random
+import time
 from atproto import Client, models
 
-# CONFIG
-BSKY_HANDLE = os.environ.get("BSKY_HANDLE") # e.g. vigilis.bsky.social
+# --- CONFIG ---
+BSKY_HANDLE = os.environ.get("BSKY_HANDLE")
 BSKY_PASSWORD = os.environ.get("BSKY_PASSWORD")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 client = Client()
 
-def generate_value_post(context="trending"):
+def generate_human_insight(context="AI security"):
+    """Groq API: Chill Dev Mode"""
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
     
-    prompt = f"Write a very short, helpful tip (max 200 chars) for AI developers about {context}. Focus on security or preventing hallucinations. No hashtags, no sales speech. Just value."
+    prompt = f"""
+    You are a chill AI security researcher who hates corporate fluff. 
+    Context: {context}
+    Task: Write a very short, sharp observation (max 160 chars) about AI safety or LLM hallucinations.
+    Style: No emojis, no hashtags, no 'Hey everyone', no marketing talk. 
+    Just sound like a smart dev thinking out loud on a Wednesday morning.
+    Example: "Most AI agents fail because people forget to bound their system instructions. It's like leaving the front door open for prompt injection."
+    """
     
     payload = {
         "model": "llama-3.3-70b-versatile",
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 80
+        "max_tokens": 100
     }
     
     try:
-        resp = requests.post(url, headers=headers, json=payload)
-        return resp.json()['choices'][0]['message']['content'].strip()
-    except:
-        return "Pro Tip: Always sanitize your AI agent's system prompts to avoid prompt injection."
+        resp = requests.post(url, headers=headers, json=payload, timeout=10)
+        content = resp.json()['choices'][0]['message']['content'].strip()
+        # Remove quotes if AI adds them
+        return content.replace('"', '')
+    except Exception as e:
+        print(f"Groq Error: {e}")
+        return "Sanitizing system prompts is basic, but still, half the AI agents out there are wide open to basic jailbreaks."
 
 def run_bluesky_promo():
     try:
+        print("🤖 Connecting to Bluesky...")
         client.login(BSKY_HANDLE, BSKY_PASSWORD)
         
-        # 1. Create a Value Post
-        text = generate_value_post("AI Agent Security")
+        # 1. Post a Value-Add Insight
+        text = generate_human_insight()
         client.send_post(text=text)
-        print(f"✅ Posted to Bluesky: {text}")
+        print(f"✅ Posted: {text}")
         
-        # 2. Interaction (Like/Reply to AI topics)
-        # Note: Simple search and like for now
-        search = client.app.bsky.feed.get_timeline() # Simplest way to get fresh feed
-        for post in search.feed[:3]:
-            client.like(post.post.uri, post.post.cid)
-            print(f"❤️ Liked post from {post.post.author.handle}")
+        # 2. Value-Add Commenting (Spam nahi, help)
+        # Trending topics search
+        print("🔍 Finding AI conversations to join...")
+        search_results = client.app.bsky.feed.get_timeline(algorithm='reverse-chronological')
+        
+        count = 0
+        for feed_view in search_results.feed:
+            if count >= 2: break # Only 2 interactions to keep it human
+            
+            post = feed_view.post
+            # Like the post
+            client.like(post.uri, post.cid)
+            print(f"❤️ Liked: {post.author.handle}")
+            
+            # Add a value comment
+            comment_text = generate_human_insight(context="Specific AI safety tip")
+            # In a real scenario, you'd reply to the post CID, but keeping it simple for now
+            # client.send_post(text=comment_text, reply_to=models.ComAtprotoRepoCreateRecord.ReplyRef(post, post))
+            
+            count += 1
+            time.sleep(5)
             
     except Exception as e:
-        print(f"❌ Bluesky Error: {e}")
+        print(f"❌ Bluesky Critical Error: {e}")
 
 if __name__ == "__main__":
-    run_bluesky_promo()
+    if not BSKY_HANDLE or not BSKY_PASSWORD or not GROQ_API_KEY:
+        print("❌ Missing API Keys in Secrets!")
+    else:
+        run_bluesky_promo()
