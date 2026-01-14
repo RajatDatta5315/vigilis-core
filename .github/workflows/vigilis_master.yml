@@ -1,0 +1,50 @@
+name: Vigilis Master Engine
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Har 15 min monitoring ke liye
+  workflow_dispatch: # Button ke liye
+
+jobs:
+  # JOB 1: Monitoring (Har 15 min)
+  monitor_task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Run Neural Monitor
+        env:
+          JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
+          JSONBIN_ID: ${{ secrets.JSONBIN_ID }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: python vigilis_monitor.py
+
+  # JOB 2: Bluesky Marketing (Har 30 min ya manual)
+  social_task:
+    runs-on: ubuntu-latest
+    # Ye job tabhi chalega jab cron 30 min pe ho ya manual run ho
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install Social Deps
+        run: pip install atproto requests
+
+      - name: Run Marketing Bot
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python bluesky_bot.py
