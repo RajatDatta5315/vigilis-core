@@ -1,8 +1,8 @@
 name: Vigilis Bluesky Social
 on:
   schedule:
-    - cron: '*/30 * * * *' # Har 30 min me social activity
-  workflow_dispatch:
+    - cron: '*/30 * * * *' # Har 30 min mein activity
+  workflow_dispatch: # ISSE BUTTON AA JAYEGA
 
 jobs:
   social:
