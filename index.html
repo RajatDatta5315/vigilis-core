@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://api.velqa.kryv.network/v3/inject.js?id=ID_45FDC02"></script>
+    
+    <script type="application/ld+json">
+    { 
+      "@context": "https://schema.org",
+      "@type": "WebSite", 
+      "name": "Vigilis.kryv.network",
+      "description": "VIGILIS | Global AI Defense Grid - Monitoring AI Hallucinations via KRYV Network",
+      "url": "https://vigilis.kryv.network"
+    }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIGILIS | Global AI Defense Grid</title>
@@ -26,7 +38,6 @@
             min-height: 100vh;
         }
 
-        /* --- RESPONSIVE NAVBAR --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -53,7 +64,6 @@
             font-size: 0.8rem; text-transform: uppercase;
         }
 
-        /* MOBILE FIXES */
         @media (max-width: 768px) {
             nav { flex-direction: column; gap: 15px; padding: 15px; }
             .nav-links { width: 100%; justify-content: space-between; }
@@ -61,7 +71,6 @@
             .cta-button { font-size: 0.75rem; padding: 10px 12px; }
         }
 
-        /* GRID */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .hero { text-align: center; padding: 40px 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
@@ -103,6 +112,7 @@
     <script>
         async function fetchStatus() {
             try {
+                // Fetching from JSONBin or Public Status file
                 const response = await fetch('status_public.json?t=' + new Date().getTime());
                 if (!response.ok) throw new Error("Uplink Failed");
                 const data = await response.json();
