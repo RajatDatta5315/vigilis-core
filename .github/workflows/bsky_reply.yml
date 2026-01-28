@@ -1,0 +1,19 @@
+name: Vigilis Bluesky Reply
+on:
+  schedule:
+    - cron: '15 */4 * * *' # Har 4 ghante mein check karega
+  workflow_dispatch:
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.9' }
+      - run: pip install atproto requests
+      - env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python bsky_reply_bot.py
