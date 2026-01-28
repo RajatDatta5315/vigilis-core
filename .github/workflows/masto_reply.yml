@@ -1,0 +1,18 @@
+name: Vigilis Mastodon Reply
+on:
+  schedule:
+    - cron: '45 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install requests
+      - env:
+          MASTO_INSTANCE: ${{ secrets.MASTO_INSTANCE }}
+          MASTO_TOKEN: ${{ secrets.MASTO_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python masto_reply_bot.py
