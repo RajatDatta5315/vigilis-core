@@ -12,83 +12,85 @@
         :root { --bg: #050505; --neon: #00ff41; }
         body { margin: 0; color: #fff; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; background: #000; }
         
-        /* Navbar */
-        nav { padding: 20px 5%; display: flex; justify-content: space-between; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo { font-weight: 700; letter-spacing: 2px; font-size: 1.2rem; }
+        nav { padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0,255,65,0.2); }
+        .logo { font-weight: 700; letter-spacing: 3px; font-size: 1.4rem; color: var(--neon); text-decoration: none; }
         
-        /* Hero */
-        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 10; position: relative; }
-        h1 { font-size: 3.5rem; text-transform: uppercase; margin: 0; text-shadow: 0 0 20px rgba(0,255,65,0.5); }
-        p { color: #888; max-width: 600px; margin-top: 10px; }
-        
-        /* Grid */
-        .grid-section { padding: 50px 10%; background: rgba(5,5,5,0.8); backdrop-filter: blur(5px); }
-        .card { border: 1px solid rgba(0,255,65,0.2); padding: 20px; background: rgba(0,0,0,0.6); margin-bottom: 15px; border-radius: 8px; }
-        
-        /* FAQ Section (Dynamic Scroll) */
-        .faq-section { padding: 80px 15%; background: linear-gradient(to top, #000, transparent); }
-        .faq-item { border-bottom: 1px solid #333; padding: 20px 0; }
-        .faq-q { color: var(--neon); font-weight: bold; cursor: pointer; }
-        .faq-a { color: #aaa; margin-top: 5px; display: none; }
-        .faq-item:hover .faq-a { display: block; animation: fadeIn 0.5s; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .legacy-link { color: #555; text-decoration: none; font-size: 0.8rem; border: 1px solid #333; padding: 4px 10px; border-radius: 4px; transition: 0.3s; }
+        .legacy-link:hover { color: #fff; border-color: #666; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hero { height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 10; position: relative; pointer-events: none; }
+        h1 { font-size: 3.5rem; text-transform: uppercase; margin: 0; letter-spacing: -2px; }
+        p { color: #888; max-width: 500px; margin-top: 15px; line-height: 1.6; }
+        
+        .grid-section { padding: 40px 10%; background: rgba(5,5,5,0.9); position: relative; z-index: 20; }
+        .card { border: 1px solid rgba(255,255,255,0.05); padding: 25px; background: rgba(10,10,10,0.8); margin-bottom: 20px; border-radius: 12px; transition: 0.3s; }
+        .card:hover { border-color: var(--neon); transform: translateY(-5px); }
+        
+        .faq-section { padding: 60px 15%; background: #050505; position: relative; z-index: 20; }
+        .faq-item { border-bottom: 1px solid #111; padding: 20px 0; }
+        .faq-q { color: var(--neon); font-weight: 500; cursor: pointer; font-size: 1.1rem; }
+        .faq-a { color: #666; margin-top: 10px; display: none; font-size: 0.95rem; }
+        .faq-item:hover .faq-a { display: block; animation: slideDown 0.4s ease-out; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">VIGILIS V2</div>
-        <div>
-            <a href="generate.html" style="color:#aaa; text-decoration:none; margin-right:20px;">ACCESS KEY</a>
-            <a href="add.html" style="color:var(--neon); text-decoration:none; border:1px solid var(--neon); padding:5px 15px;">INITIALIZE</a>
+        <a href="#" class="logo">VIGILIS</a>
+        <div class="nav-right">
+            <a href="dashboard.html" class="legacy-link">Switch to Classic View</a>
+            <a href="add.html" style="color:var(--neon); text-decoration:none; font-weight:700;">INITIALIZE AGENT +</a>
         </div>
     </nav>
 
     <div class="hero">
-        <h1>Global Neural Defense</h1>
-        <p>Securing AI Agents from Hallucinations & Injections via KRYV Network.</p>
+        <h1>NEURAL DEFENSE GRID</h1>
+        <p>Real-time hallucination monitoring and autonomous security for the next generation of AI agents.</p>
     </div>
 
     <div class="grid-section">
-        <h3>/// ACTIVE NEURAL NODES</h3>
-        <div id="dashboard">Loading Grid Data...</div>
+        <h2 style="color:var(--neon); font-size:0.9rem; letter-spacing:2px;">// ACTIVE_NODES_STATUS</h2>
+        <div id="dashboard_v2">Loading Uplink...</div>
     </div>
 
     <div class="faq-section">
-        <h2>System Intelligence (FAQs)</h2>
+        <h2 style="margin-bottom:40px;">Deep Intel / FAQ</h2>
         <div class="faq-item">
-            <div class="faq-q">> How does Vigilis detect hallucinations?</div>
-            <div class="faq-a">We use a adversarial prompt injection technique to test agent boundaries every 15 minutes.</div>
+            <div class="faq-q">01. What is the KRYV Uplink?</div>
+            <div class="faq-a">A decentralized protocol used by Vigilis to monitor agent health without compromising private training data.</div>
         </div>
         <div class="faq-item">
-            <div class="faq-q">> Is my agent data private?</div>
-            <div class="faq-a">Yes. All sensitive logs are encrypted in the KRYV uplink. Only status codes are public.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">> Can I integrate with Mastodon bots?</div>
-            <div class="faq-a">Native support for Bluesky, Mastodon, and Tumblr automation is built-in.</div>
+            <div class="faq-q">02. How do I get an Access Key?</div>
+            <div class="faq-a">Keys are currently distributed via the 'Get Free Key' portal on our legacy dashboard.</div>
         </div>
     </div>
 
     <script src="universe_bg.js"></script>
-    
     <script>
-        async function fetchStatus() {
+        async function fetchV2() {
             try {
                 const res = await fetch('status_public.json?t=' + Date.now());
                 const data = await res.json();
-                const d = document.getElementById('dashboard');
-                d.innerHTML = '';
-                data.forEach(c => {
-                    d.innerHTML += `<div class="card" style="border-left: 3px solid ${c.status === 'SECURE' ? '#00ff41' : 'red'}">
-                        <strong>${c.name}</strong> <span style="float:right">${c.status}</span>
-                        <div style="font-size:0.8em; color:#666; margin-top:5px">${c.detail}</div>
-                    </div>`;
+                const container = document.getElementById('dashboard_v2');
+                container.innerHTML = '';
+                data.forEach(node => {
+                    container.innerHTML += `
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight:700; font-size:1.2rem;">${node.name}</span>
+                                <span style="color:${node.status === 'SECURE' ? '#00ff41' : '#ff3333'}; font-size:0.8rem; font-weight:700; border:1px solid; padding:2px 8px; border-radius:4px;">${node.status}</span>
+                            </div>
+                            <p style="font-size:0.9rem; color:#555; margin:10px 0 0 0;">${node.detail}</p>
+                        </div>
+                    `;
                 });
-            } catch(e) { console.log(e); }
+            } catch(e) { console.error("Neural Sync Error"); }
         }
-        fetchStatus();
+        fetchV2();
+        setInterval(fetchV2, 60000); // Auto refresh every minute
     </script>
 </body>
 </html>
